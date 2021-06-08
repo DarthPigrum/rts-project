@@ -7,18 +7,22 @@ class Task {
   int _startTick = 0;
   int _endTick = 0;
   QString _name;
+  bool _interuptable;
 
- public:
-  explicit Task(QString name, int weight, int priority)
-      : _weight(weight), _priority(priority), _name(name) {}
-  explicit Task(int index, int weight, int priority)
-      : _weight(weight),
-        _priority(priority),
-        _name(QString("#") + QString::number(index)){};
+public:
+  explicit Task(QString name, int weight, int priority,
+                bool interuptable = true)
+      : _weight(weight), _priority(priority), _name(name),
+        _interuptable(interuptable) {}
+  explicit Task(int index, int weight, int priority, bool interuptable = true)
+      : _weight(weight), _priority(priority),
+        _name(QString("#") + QString::number(index)),
+        _interuptable(interuptable){};
   bool isFinished() { return _weight == _progress; };
   bool increment() {
     bool res = _progress < _weight;
-    if (res) _progress++;
+    if (res)
+      _progress++;
     return res;
   }
   void startAt(int tick) { _startTick = tick; }
@@ -28,4 +32,5 @@ class Task {
   int progress() const { return _progress; }
   int weight() const { return _weight; }
   int priority() const { return _priority; }
+  bool interuptable() const { return _interuptable; }
 };

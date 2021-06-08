@@ -14,7 +14,7 @@ class GUI;
 
 class View : public QMainWindow {
   Q_OBJECT
- public:
+public:
   explicit View(QWidget *parent = nullptr)
       : QMainWindow(parent), ui(new Ui::GUI) {
     ui->setupUi(this);
@@ -34,15 +34,18 @@ class View : public QMainWindow {
   };
   int getSpeed() { return ui->msPerTick->value(); }
   int getQuantSize() { return ui->quantSize->value(); }
- signals:
+signals:
   void start();
   void stop();
   void draw();
- public slots:
-  void setCurrentTask(const std::shared_ptr<Task> &task) {
-    ui->currentTaskLabel->setText(task->name());
-    ui->currentTaskProgressBar->setMaximum(task->weight());
-    ui->currentTaskProgressBar->setValue(task->progress());
+public slots:
+  void setCurrentTasks(const std::vector<std::shared_ptr<Task>> &task) {
+    ui->currentTaskLabel->setText(task[0]->name());
+    ui->currentTaskProgressBar->setMaximum(task[0]->weight());
+    ui->currentTaskProgressBar->setValue(task[0]->progress());
+    ui->currentTaskLabel_2->setText(task[1]->name());
+    ui->currentTaskProgressBar_2->setMaximum(task[1]->weight());
+    ui->currentTaskProgressBar_2->setValue(task[1]->progress());
   }
   void setTaskList(const std::deque<std::shared_ptr<Task>> &list) {
     int i = 0;
@@ -74,8 +77,8 @@ class View : public QMainWindow {
     ui->graphs->update();
   }
 
- private:
+private:
   Ui::GUI *ui;
 };
 
-#endif  // GUI_H
+#endif // GUI_H
