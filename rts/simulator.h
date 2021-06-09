@@ -21,6 +21,7 @@ class Simulator {
   std::uniform_int_distribution<> weight;
   std::uniform_int_distribution<> priority;
   std::uniform_int_distribution<> interval;
+  _priorityOffset = 0;
   void insert(std::shared_ptr<Task> task) {
     _queue.push_back(task);
     std::sort(_queue.begin(), _queue.end(), [](const auto& a, const auto& b) {
@@ -44,7 +45,9 @@ class Simulator {
     if (!timeLeftInInterval) {
       timeLeftInInterval = interval(gen);
       auto task =
-          std::make_shared<Task>(++taskCounter, weight(gen), priority(gen));
+          std::make_shared<Task>(++taskCounter, weight(gen), priority.min() + _priorityOffset);
+          _priorityOffset++;
+          _priorityOffset %= (priority.max() - priority.min() + 1);
       task->startAt(totalTicks);
       insert(task);
     }
